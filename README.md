@@ -1,21 +1,19 @@
 # NullFlow
+[arXiv](https://arxiv.org/abs/2606.22696)
+## Abstract
 
-NullFlow is the compact release folder for demonstrating the core one-step PMF
-inpainting method. The public-facing workflow is organized around three
-entry points:
-
-- `train.sh`: train the FFHQ 256x256 inpainting model.
-- `infer.sh`: run one-step reconstruction from a trained checkpoint.
-- `NullFlow.utils.render_result`: turn inference outputs into GitHub-ready result figures.
-
-The implementation used by these modules lives in `NullFlow/`. The UNet backbone
-depends on the local `guided_diffusion/` components. Experiment presets are in
-`configs/`, and Python dependencies are listed in `requirements.txt`.
-
-Datasets, checkpoints, logs, cached statistics, and generated images are not
-versioned. Configure local paths in the selected YAML file before running.
+We propose NullFlow, a principled framework for one-step generative image reconstruction. Our key idea is to confine the generative flow to a measurement-consistent subspace. Because the flow never leaves this subspace, NullFlow needs no separate data-fidelity corrections, unlike existing solvers. NullFlow samples in a single network evaluation by learning the flow's average velocity, avoiding the step-by-step integration of traditional flow matching methods. We prove that the average velocity of this constrained flow yields a training objective whose global minimizer is a one-step posterior sampler. We show on image inpainting that NullFlow matches state-of-the-art diffusion solvers while cutting inference from hundreds of network evaluations to one.
 
 ## Setup
+
+### 1) Clone the repository
+```bash
+git clone https://github.com/uw-cig/NullFlow.git
+cd NullFlow
+```
+### 2) Download Pretrained Model
+
+### 3) Virtual environment setup
 
 ```bash
 conda create -n nullflow python=3.12 pip
