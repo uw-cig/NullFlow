@@ -182,19 +182,17 @@ accumulates gradients up to the global batch, so the schedule does not depend on
 checkpoint is saved every 5 epochs.
 
 **MRI:**
-- 80 epochs of 538 steps (43,040 steps in total)
+- 100 epochs
 - global batch 16
 - AdamW at lr 1e-4 with cosine decay to 1e-6, weight decay 1e-4, gradient clipping at 1
-- On 4 RTX PRO 6000 GPUs a run takes about 7 hours.
 
 **FFHQ:**
-- an epoch is one pass over the 69,000 training images (135 steps), with random horizontal flips
+- 100 epochs; an epoch is one pass over the 69,000 training images, with random horizontal flips
 - global batch 512, as 4 images per GPU with gradient accumulation
 - AdamW (β = 0.9, 0.95) at a constant lr 1e-4, no weight decay, gradient clipping at 1, dropout 0.1
 - adaptive loss weight normalized by a running mean of the residual (`nullflow.weight_norm: ema`)
 - validation: one-draw PSNR on the 500 validation images after every epoch. The lr is multiplied by 0.1 once,
-  after validation PSNR first reaches 23 dB on two consecutive epochs (epoch 16 for box, epoch 2 for random).
-- lr 5e-6 from epoch 41 (box, 90 epochs in total) or epoch 51 (random, 100 epochs in total)
+  after validation PSNR first reaches 23 dB on two consecutive epochs.
 - On RTX PRO 5000 GPUs, one epoch takes about 22 min on 4 GPUs (box) and about 45 min on 2 GPUs (random).
 
 **Checkpoint selection.** We pick the checkpoint with the highest one-draw PSNR on the validation split:
