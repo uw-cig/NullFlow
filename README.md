@@ -139,9 +139,10 @@ GPUS=0,1,2,3 ./run.sh ffhq_box train                     # train on 4 GPUs into 
 ./run.sh ffhq_box export runs/ffhq_box/checkpoints/epoch_0075.pt   # -> checkpoints/nullflow_ffhq_box.pt
 ```
 
-## Evaluate the released models
+## Pretrained models
 
-Download the released files (see Releases) into `checkpoints/`, or point `CKPTS` to them.
+Download the released weights from Hugging Face ([xiaoshi2610/NullFlow](https://huggingface.co/xiaoshi2610/NullFlow)) into `checkpoints/`:
+`hf download xiaoshi2610/NullFlow --local-dir checkpoints` (after `pip install -U huggingface_hub`).
 
 | File | Size | sha256 |
 |---|---|---|
@@ -160,15 +161,6 @@ python evaluate.py --config configs/brain.yaml --ckpt checkpoints/nullflow_brain
 python evaluate.py --config configs/ffhq_box.yaml --ckpt checkpoints/nullflow_ffhq_box.pt --split test --M 1 4 16 100 --lpips
 python evaluate.py --config configs/ffhq_random.yaml --ckpt checkpoints/nullflow_ffhq_random.pt --split test --M 1 4 16 100 --lpips
 ```
-
-**Draws.** For each item, y is computed once, and only the source draws are resampled:
-- **Measurement:** the global RNG is seeded with `seed · 100003 + i + 777767`, which fixes a random inpainting mask.
-- **Source draws:** they come from a generator seeded with `seed · 100003 + i`, where `seed` is set by `--seed`.
-
-So the numbers above are reproduced exactly. The `--M` values are prefixes of one pool of draws.
-
-**Saving outputs.** Add `--out <dir>` (or set `OUT`) to save per-item metrics and the reconstructions:
-`.pt` files for MRI, PNG files for FFHQ.
 
 ## Train
 
