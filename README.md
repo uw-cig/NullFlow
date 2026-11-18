@@ -227,14 +227,11 @@ checkpoint is saved every 5 epochs.
 ## Citation
 
 ```bibtex
-@misc{shi2026nullflowonestepgenerativereconstruction,
-      title={NullFlow: One-Step Generative Reconstruction},
-      author={Xiao Shi and Edward P. Chandler and Chicago Y. Park and Shirin Shoushtari and Ulugbek S. Kamilov},
-      year={2026},
-      eprint={2606.22696},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2606.22696},
+@article{shi2026nullflow,
+  title   = {NullFlow: One-Step Generative Reconstruction},
+  author  = {Xiao Shi and Edward P. Chandler and Chicago Y. Park and Shirin Shoushtari and Ulugbek S. Kamilov},
+  journal = {arXiv preprint arXiv:2606.22696},
+  year    = {2026}
 }
 ```
 
