@@ -8,9 +8,12 @@ One-step reconstruction for linear inverse problems. NullFlow learns a MeanFlow 
 Given noiseless measurements y = A x, the source keeps the part of the image that y determines and
 randomizes only the rest:
 
-```
-x1 = x_p + (A^H A + λ I)^-1 A^H (y − A x_p),    x_p ~ N(0, τ² I),  λ = 1e-8
-   ≈ A⁺ y + P_null(A) x_p
+```math
+\begin{aligned}
+x_1 &= x_p + (A^{H}A + \lambda I)^{-1} A^{H}\,(y - A x_p),
+\qquad x_p \sim \mathcal{N}(0, \tau^2 I),\ \lambda = 10^{-8} \\
+    &\approx A^{+} y + P_{\mathrm{null}(A)}\, x_p
+\end{aligned}
 ```
 
 The two forward operators:
@@ -41,7 +44,7 @@ from 77 test volumes (`data_splits/brain/test100.txt`).
 | Draws averaged | R = 4: PSNR / SSIM / LPIPS | R = 8: PSNR / SSIM / LPIPS | Time per slice |
 |---|---|---|---|
 | 1 | 33.54 / 0.903 / 0.049 | 29.95 / 0.854 / 0.106 | 0.08 s |
-| 16 | 34.06 / 0.920 / 0.054 | 30.31 / 0.865 / 0.108 | 1.55 s |
+| 100 | 34.09 / 0.921 / 0.054 | 30.33 / 0.865 / 0.108 | 9.80 s |
 
 All metrics are on the magnitude image, with each slice's maximum as its data range:
 - **PSNR**
@@ -53,19 +56,10 @@ pseudo-inverse takes 0.06 s and the network 0.02 s.
 
 **FFHQ 256 × 256 inpainting**, noiseless. Test set: images 00000–00499.
 
-| Draws averaged | Box: PSNR / SSIM / LPIPS | Random: PSNR / SSIM / LPIPS |
-|---|---|---|
-| 1 | 24.16 / 0.879 / 0.067 | 31.74 / 0.906 / 0.052 |
-| 4 | 26.03 / 0.899 / 0.070 | 32.66 / 0.921 / 0.057 |
-| 16 | 26.72 / 0.908 / 0.086 | 32.92 / 0.924 / 0.060 |
-| 100 | 26.92 / 0.912 / 0.102 | 33.00 / 0.925 / 0.061 |
-
-The metrics are scored on the network output in [0, 1], with data range 1:
-- **PSNR**
-- **SSIM:** torchmetrics, Gaussian window 11, σ 1.5
-- **LPIPS:** AlexNet
-
-`evaluate.py --restore` scores the output with the observed pixels pasted back instead.
+| Draws averaged | Box: PSNR / SSIM / LPIPS | Random: PSNR / SSIM / LPIPS | Time per sample |
+|---|---|---|---|
+| 1 | 24.42 / 0.887 / 0.070 | 31.14 / 0.897 / 0.033 |0.011 s|
+| 100 | 26.72 / 0.908 / 0.086 | 32.16 / 0.911 / 0.075 |0.981 s|
 
 **Time.** One NVIDIA RTX PRO 5000 (Blackwell): 10.5 ms per draw with 50 draws per network call, so 1.05 s for
 100 draws of an image. The source costs almost nothing here.
