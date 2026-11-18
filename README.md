@@ -51,9 +51,6 @@ pseudo-inverse takes 0.06 s and the network 0.02 s.
 | 1 | 24.42 / 0.887 / 0.070 | 31.14 / 0.897 / 0.033 |0.011 s|
 | 100 | 26.72 / 0.908 / 0.086 | 32.16 / 0.911 / 0.075 |0.981 s|
 
-**Time.** On one GPU: 10.5 ms per draw with 50 draws per network call, so 1.05 s for
-100 draws of an image. The source costs almost nothing here.
-
 ## Installation
 
 ```bash
@@ -193,7 +190,6 @@ checkpoint is saved every 5 epochs.
 - adaptive loss weight normalized by a running mean of the residual
 - validation: one-draw PSNR on the 500 validation images after every epoch. The lr is multiplied by 0.1 once,
   after validation PSNR first reaches 23 dB on two consecutive epochs.
-- One epoch takes about 22 min on 4 GPUs (box) and about 45 min on 2 GPUs (random).
 
 **Checkpoint selection.** We pick the checkpoint with the highest one-draw PSNR on the validation split:
 - MRI: the 20 validation slices. Epoch 60 was selected at both R = 4 and R = 8.
