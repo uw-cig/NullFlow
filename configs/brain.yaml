@@ -1,0 +1,61 @@
+# NullFlow on multi-coil fastMRI brain (AXT2, 320 x 320), noiseless measurements.
+# The acceleration is set per run:  --set mri.acceleration=8
+
+task: mri
+
+data:
+  cache_dir: data/cache320                              # scripts/build_cache.py output
+  index_json: data_splits/brain/index_AXT2_320.json
+  max_coils: 20                                         # maps are zero-padded to this many coils
+  train_ids: null                                       # optional id file: train on a subset
+
+mri:
+  acceleration: 4               # R = 4 or 8
+  total_lines: 320
+  mask_seed: 0                  # one fixed Cartesian mask for training and testing
+  pattern: random
+  cg_iters: 200                 # CG iterations of the source's pseudo-inverse
+  cg_tol: 1.0e-6
+
+nullflow:
+  tau: 1.0                      # null-space draw x_p ~ N(0, tau^2 I)
+  sigma: 0.0                    # measurement noise std
+  p_ratio: 0.5                  # fraction of samples with r = t
+  corner_frac: 0.1              # share of the r < t samples moved to r ~ 0, t ~ 1
+  logit_mu: 0.0                 # t ~ logit-normal(logit_mu, logit_sigma)
+  logit_sigma: 1.0
+  weight_c: 1.0e-3              # adaptive loss weight w = (m + c)^-p
+  weight_p: 1.0
+  t_eps: 1.0e-3
+
+model:                          # 40.7M parameters
+  in_ch: 2
+  out_ch: 2
+  input_height: 320
+  ch: 32
+  ch_mult: [1, 2, 4, 8, 8]
+  num_res_blocks: 4
+  attn_resolutions: [40]
+  dropout: 0.0
+  resamp_with_conv: true
+  cond_r: true
+  cond_sigma: true
+  sigma_emb_scale: 10.0
+
+training:
+  epochs: 80
+  steps_per_epoch: 538          # optimizer steps per epoch (80 epochs = 43,040 steps)
+  batch_size: 16                # global batch, split evenly over the GPUs
+  lr: 1.0e-4                    # AdamW, cosine decay to lr_min, stepped once per epoch
+  lr_schedule: cosine
+  lr_min: 1.0e-6
+  weight_decay: 1.0e-4
+  grad_clip: 1.0
+  save_every: 5                 # epochs between checkpoints
+  val_every: 0                  # no validation during training: select checkpoints with evaluate.py
+  num_workers: 8
+  seed: 42
+  backend: nccl                 # torch.distributed backend for multi-GPU runs (gloo if NCCL fails)
+
+eval:
+  chunk: 8                      # draws per CG solve and network call

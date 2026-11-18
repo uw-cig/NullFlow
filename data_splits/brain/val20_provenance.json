@@ -1,0 +1,131 @@
+{
+ "split": "val",
+ "n_slices": 20,
+ "n_volumes": 20,
+ "total_slices_in_split": 539,
+ "total_volumes_in_split": 77,
+ "ids": [
+  3,
+  31,
+  59,
+  87,
+  115,
+  143,
+  171,
+  199,
+  227,
+  255,
+  283,
+  311,
+  339,
+  367,
+  395,
+  423,
+  451,
+  479,
+  507,
+  535
+ ],
+ "slices": [
+  {
+   "id": 3,
+   "file": "file_brain_AXT2_209_6001066.h5",
+   "slice": 7
+  },
+  {
+   "id": 31,
+   "file": "file_brain_AXT2_200_6002484.h5",
+   "slice": 7
+  },
+  {
+   "id": 59,
+   "file": "file_brain_AXT2_210_2100065.h5",
+   "slice": 7
+  },
+  {
+   "id": 87,
+   "file": "file_brain_AXT2_208_2080424.h5",
+   "slice": 7
+  },
+  {
+   "id": 115,
+   "file": "file_brain_AXT2_201_2010069.h5",
+   "slice": 7
+  },
+  {
+   "id": 143,
+   "file": "file_brain_AXT2_210_2100028.h5",
+   "slice": 7
+  },
+  {
+   "id": 171,
+   "file": "file_brain_AXT2_200_6002457.h5",
+   "slice": 7
+  },
+  {
+   "id": 199,
+   "file": "file_brain_AXT2_201_2010464.h5",
+   "slice": 7
+  },
+  {
+   "id": 227,
+   "file": "file_brain_AXT2_207_2070759.h5",
+   "slice": 7
+  },
+  {
+   "id": 255,
+   "file": "file_brain_AXT2_200_6002058.h5",
+   "slice": 7
+  },
+  {
+   "id": 283,
+   "file": "file_brain_AXT2_203_2030167.h5",
+   "slice": 7
+  },
+  {
+   "id": 311,
+   "file": "file_brain_AXT2_202_2020138.h5",
+   "slice": 7
+  },
+  {
+   "id": 339,
+   "file": "file_brain_AXT2_208_2080325.h5",
+   "slice": 7
+  },
+  {
+   "id": 367,
+   "file": "file_brain_AXT2_200_2000349.h5",
+   "slice": 7
+  },
+  {
+   "id": 395,
+   "file": "file_brain_AXT2_200_2000617.h5",
+   "slice": 7
+  },
+  {
+   "id": 423,
+   "file": "file_brain_AXT2_209_2090296.h5",
+   "slice": 7
+  },
+  {
+   "id": 451,
+   "file": "file_brain_AXT2_201_2010378.h5",
+   "slice": 7
+  },
+  {
+   "id": 479,
+   "file": "file_brain_AXT2_204_2040097.h5",
+   "slice": 7
+  },
+  {
+   "id": 507,
+   "file": "file_brain_AXT2_207_2070431.h5",
+   "slice": 7
+  },
+  {
+   "id": 535,
+   "file": "file_brain_AXT2_209_2090209.h5",
+   "slice": 7
+  }
+ ]
+}

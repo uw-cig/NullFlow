@@ -1,14 +1,9 @@
-deepinv
-lpips
-numpy
-opencv-python
-pillow
-pyyaml
-pytest
-requests
-scikit-image
-torch
-torch-fidelity
-torchvision
-tqdm
-wandb
+# Tested with Python 3.11.13, torch 2.7.1 (CUDA 12.8), torchvision 0.22.1 (MRI), and with Python 3.12.13,
+# torch 2.11.0 (CUDA 13.0), torchvision 0.26.0 (MRI and FFHQ). Install torch and torchvision separately.
+numpy          # tested 2.4.4
+h5py           # tested 3.16.0
+PyYAML         # tested 6.0.3
+torchmetrics   # tested 1.9.0
+lpips          # tested 0.1.4; only for evaluate.py --lpips
+Pillow         # tested 12.2.0; FFHQ images
+sigpy          # tested 0.1.27; only for scripts/build_cache.py (ESPIRiT)

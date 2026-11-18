@@ -1,0 +1,611 @@
+{
+ "split": "test",
+ "n_slices": 100,
+ "n_volumes": 77,
+ "total_slices_in_split": 539,
+ "total_volumes_in_split": 77,
+ "ids": [
+  2,
+  3,
+  10,
+  17,
+  23,
+  24,
+  31,
+  38,
+  45,
+  51,
+  52,
+  59,
+  66,
+  72,
+  73,
+  80,
+  87,
+  94,
+  100,
+  101,
+  108,
+  115,
+  121,
+  122,
+  129,
+  136,
+  143,
+  149,
+  150,
+  157,
+  164,
+  170,
+  171,
+  178,
+  185,
+  192,
+  198,
+  199,
+  206,
+  213,
+  219,
+  220,
+  227,
+  234,
+  241,
+  247,
+  248,
+  255,
+  262,
+  268,
+  269,
+  276,
+  283,
+  289,
+  290,
+  297,
+  304,
+  311,
+  317,
+  318,
+  325,
+  332,
+  338,
+  339,
+  346,
+  353,
+  360,
+  366,
+  367,
+  374,
+  381,
+  387,
+  388,
+  395,
+  402,
+  409,
+  415,
+  416,
+  423,
+  430,
+  436,
+  437,
+  444,
+  451,
+  458,
+  464,
+  465,
+  472,
+  479,
+  485,
+  486,
+  493,
+  500,
+  507,
+  513,
+  514,
+  521,
+  528,
+  534,
+  535
+ ],
+ "slices": [
+  {
+   "id": 2,
+   "file": "file_brain_AXT2_201_2010574.h5",
+   "slice": 6
+  },
+  {
+   "id": 3,
+   "file": "file_brain_AXT2_201_2010574.h5",
+   "slice": 7
+  },
+  {
+   "id": 10,
+   "file": "file_brain_AXT2_208_2080483.h5",
+   "slice": 7
+  },
+  {
+   "id": 17,
+   "file": "file_brain_AXT2_205_2050155.h5",
+   "slice": 7
+  },
+  {
+   "id": 23,
+   "file": "file_brain_AXT2_208_2080544.h5",
+   "slice": 6
+  },
+  {
+   "id": 24,
+   "file": "file_brain_AXT2_208_2080544.h5",
+   "slice": 7
+  },
+  {
+   "id": 31,
+   "file": "file_brain_AXT2_200_6002519.h5",
+   "slice": 7
+  },
+  {
+   "id": 38,
+   "file": "file_brain_AXT2_203_2030309.h5",
+   "slice": 7
+  },
+  {
+   "id": 45,
+   "file": "file_brain_AXT2_208_2080564.h5",
+   "slice": 7
+  },
+  {
+   "id": 51,
+   "file": "file_brain_AXT2_203_2030363.h5",
+   "slice": 6
+  },
+  {
+   "id": 52,
+   "file": "file_brain_AXT2_203_2030363.h5",
+   "slice": 7
+  },
+  {
+   "id": 59,
+   "file": "file_brain_AXT2_200_6002351.h5",
+   "slice": 7
+  },
+  {
+   "id": 66,
+   "file": "file_brain_AXT2_207_2070799.h5",
+   "slice": 7
+  },
+  {
+   "id": 72,
+   "file": "file_brain_AXT2_208_2080229.h5",
+   "slice": 6
+  },
+  {
+   "id": 73,
+   "file": "file_brain_AXT2_208_2080229.h5",
+   "slice": 7
+  },
+  {
+   "id": 80,
+   "file": "file_brain_AXT2_205_2050008.h5",
+   "slice": 7
+  },
+  {
+   "id": 87,
+   "file": "file_brain_AXT2_200_6002022.h5",
+   "slice": 7
+  },
+  {
+   "id": 94,
+   "file": "file_brain_AXT2_200_6002173.h5",
+   "slice": 7
+  },
+  {
+   "id": 100,
+   "file": "file_brain_AXT2_207_2070441.h5",
+   "slice": 6
+  },
+  {
+   "id": 101,
+   "file": "file_brain_AXT2_207_2070441.h5",
+   "slice": 7
+  },
+  {
+   "id": 108,
+   "file": "file_brain_AXT2_208_2080539.h5",
+   "slice": 7
+  },
+  {
+   "id": 115,
+   "file": "file_brain_AXT2_201_2010037.h5",
+   "slice": 7
+  },
+  {
+   "id": 121,
+   "file": "file_brain_AXT2_202_2020343.h5",
+   "slice": 6
+  },
+  {
+   "id": 122,
+   "file": "file_brain_AXT2_202_2020343.h5",
+   "slice": 7
+  },
+  {
+   "id": 129,
+   "file": "file_brain_AXT2_202_2020177.h5",
+   "slice": 7
+  },
+  {
+   "id": 136,
+   "file": "file_brain_AXT2_208_2080670.h5",
+   "slice": 7
+  },
+  {
+   "id": 143,
+   "file": "file_brain_AXT2_201_2010470.h5",
+   "slice": 7
+  },
+  {
+   "id": 149,
+   "file": "file_brain_AXT2_200_2000573.h5",
+   "slice": 6
+  },
+  {
+   "id": 150,
+   "file": "file_brain_AXT2_200_2000573.h5",
+   "slice": 7
+  },
+  {
+   "id": 157,
+   "file": "file_brain_AXT2_205_2050091.h5",
+   "slice": 7
+  },
+  {
+   "id": 164,
+   "file": "file_brain_AXT2_202_2020436.h5",
+   "slice": 7
+  },
+  {
+   "id": 170,
+   "file": "file_brain_AXT2_205_2050160.h5",
+   "slice": 6
+  },
+  {
+   "id": 171,
+   "file": "file_brain_AXT2_205_2050160.h5",
+   "slice": 7
+  },
+  {
+   "id": 178,
+   "file": "file_brain_AXT2_207_2070831.h5",
+   "slice": 7
+  },
+  {
+   "id": 185,
+   "file": "file_brain_AXT2_209_2090293.h5",
+   "slice": 7
+  },
+  {
+   "id": 192,
+   "file": "file_brain_AXT2_200_2000021.h5",
+   "slice": 7
+  },
+  {
+   "id": 198,
+   "file": "file_brain_AXT2_209_6000992.h5",
+   "slice": 6
+  },
+  {
+   "id": 199,
+   "file": "file_brain_AXT2_209_6000992.h5",
+   "slice": 7
+  },
+  {
+   "id": 206,
+   "file": "file_brain_AXT2_209_6001452.h5",
+   "slice": 7
+  },
+  {
+   "id": 213,
+   "file": "file_brain_AXT2_207_2070122.h5",
+   "slice": 7
+  },
+  {
+   "id": 219,
+   "file": "file_brain_AXT2_200_6002187.h5",
+   "slice": 6
+  },
+  {
+   "id": 220,
+   "file": "file_brain_AXT2_200_6002187.h5",
+   "slice": 7
+  },
+  {
+   "id": 227,
+   "file": "file_brain_AXT2_200_2000159.h5",
+   "slice": 7
+  },
+  {
+   "id": 234,
+   "file": "file_brain_AXT2_208_2080548.h5",
+   "slice": 7
+  },
+  {
+   "id": 241,
+   "file": "file_brain_AXT2_200_2000572.h5",
+   "slice": 7
+  },
+  {
+   "id": 247,
+   "file": "file_brain_AXT2_203_2030053.h5",
+   "slice": 6
+  },
+  {
+   "id": 248,
+   "file": "file_brain_AXT2_203_2030053.h5",
+   "slice": 7
+  },
+  {
+   "id": 255,
+   "file": "file_brain_AXT2_208_2080294.h5",
+   "slice": 7
+  },
+  {
+   "id": 262,
+   "file": "file_brain_AXT2_207_2070419.h5",
+   "slice": 7
+  },
+  {
+   "id": 268,
+   "file": "file_brain_AXT2_210_6001842.h5",
+   "slice": 6
+  },
+  {
+   "id": 269,
+   "file": "file_brain_AXT2_210_6001842.h5",
+   "slice": 7
+  },
+  {
+   "id": 276,
+   "file": "file_brain_AXT2_208_2080571.h5",
+   "slice": 7
+  },
+  {
+   "id": 283,
+   "file": "file_brain_AXT2_201_2010606.h5",
+   "slice": 7
+  },
+  {
+   "id": 289,
+   "file": "file_brain_AXT2_209_6001112.h5",
+   "slice": 6
+  },
+  {
+   "id": 290,
+   "file": "file_brain_AXT2_209_6001112.h5",
+   "slice": 7
+  },
+  {
+   "id": 297,
+   "file": "file_brain_AXT2_209_2090277.h5",
+   "slice": 7
+  },
+  {
+   "id": 304,
+   "file": "file_brain_AXT2_204_2040095.h5",
+   "slice": 7
+  },
+  {
+   "id": 311,
+   "file": "file_brain_AXT2_207_2070368.h5",
+   "slice": 7
+  },
+  {
+   "id": 317,
+   "file": "file_brain_AXT2_205_6000043.h5",
+   "slice": 6
+  },
+  {
+   "id": 318,
+   "file": "file_brain_AXT2_205_6000043.h5",
+   "slice": 7
+  },
+  {
+   "id": 325,
+   "file": "file_brain_AXT2_200_6002253.h5",
+   "slice": 7
+  },
+  {
+   "id": 332,
+   "file": "file_brain_AXT2_208_2080605.h5",
+   "slice": 7
+  },
+  {
+   "id": 338,
+   "file": "file_brain_AXT2_207_2070637.h5",
+   "slice": 6
+  },
+  {
+   "id": 339,
+   "file": "file_brain_AXT2_207_2070637.h5",
+   "slice": 7
+  },
+  {
+   "id": 346,
+   "file": "file_brain_AXT2_205_2050122.h5",
+   "slice": 7
+  },
+  {
+   "id": 353,
+   "file": "file_brain_AXT2_210_2100085.h5",
+   "slice": 7
+  },
+  {
+   "id": 360,
+   "file": "file_brain_AXT2_200_2000638.h5",
+   "slice": 7
+  },
+  {
+   "id": 366,
+   "file": "file_brain_AXT2_200_6002225.h5",
+   "slice": 6
+  },
+  {
+   "id": 367,
+   "file": "file_brain_AXT2_200_6002225.h5",
+   "slice": 7
+  },
+  {
+   "id": 374,
+   "file": "file_brain_AXT2_204_2040029.h5",
+   "slice": 7
+  },
+  {
+   "id": 381,
+   "file": "file_brain_AXT2_201_2010074.h5",
+   "slice": 7
+  },
+  {
+   "id": 387,
+   "file": "file_brain_AXT2_209_2090204.h5",
+   "slice": 6
+  },
+  {
+   "id": 388,
+   "file": "file_brain_AXT2_209_2090204.h5",
+   "slice": 7
+  },
+  {
+   "id": 395,
+   "file": "file_brain_AXT2_210_2100286.h5",
+   "slice": 7
+  },
+  {
+   "id": 402,
+   "file": "file_brain_AXT2_208_2080387.h5",
+   "slice": 7
+  },
+  {
+   "id": 409,
+   "file": "file_brain_AXT2_202_2020485.h5",
+   "slice": 7
+  },
+  {
+   "id": 415,
+   "file": "file_brain_AXT2_209_2090371.h5",
+   "slice": 6
+  },
+  {
+   "id": 416,
+   "file": "file_brain_AXT2_209_2090371.h5",
+   "slice": 7
+  },
+  {
+   "id": 423,
+   "file": "file_brain_AXT2_200_6002193.h5",
+   "slice": 7
+  },
+  {
+   "id": 430,
+   "file": "file_brain_AXT2_200_6002657.h5",
+   "slice": 7
+  },
+  {
+   "id": 436,
+   "file": "file_brain_AXT2_203_2030231.h5",
+   "slice": 6
+  },
+  {
+   "id": 437,
+   "file": "file_brain_AXT2_203_2030231.h5",
+   "slice": 7
+  },
+  {
+   "id": 444,
+   "file": "file_brain_AXT2_200_6002654.h5",
+   "slice": 7
+  },
+  {
+   "id": 451,
+   "file": "file_brain_AXT2_208_2080164.h5",
+   "slice": 7
+  },
+  {
+   "id": 458,
+   "file": "file_brain_AXT2_202_2020147.h5",
+   "slice": 7
+  },
+  {
+   "id": 464,
+   "file": "file_brain_AXT2_209_2090042.h5",
+   "slice": 6
+  },
+  {
+   "id": 465,
+   "file": "file_brain_AXT2_209_2090042.h5",
+   "slice": 7
+  },
+  {
+   "id": 472,
+   "file": "file_brain_AXT2_205_6000054.h5",
+   "slice": 7
+  },
+  {
+   "id": 479,
+   "file": "file_brain_AXT2_207_2070681.h5",
+   "slice": 7
+  },
+  {
+   "id": 485,
+   "file": "file_brain_AXT2_203_2030395.h5",
+   "slice": 6
+  },
+  {
+   "id": 486,
+   "file": "file_brain_AXT2_203_2030395.h5",
+   "slice": 7
+  },
+  {
+   "id": 493,
+   "file": "file_brain_AXT2_207_2070180.h5",
+   "slice": 7
+  },
+  {
+   "id": 500,
+   "file": "file_brain_AXT2_207_2070756.h5",
+   "slice": 7
+  },
+  {
+   "id": 507,
+   "file": "file_brain_AXT2_208_2080250.h5",
+   "slice": 7
+  },
+  {
+   "id": 513,
+   "file": "file_brain_AXT2_203_2030039.h5",
+   "slice": 6
+  },
+  {
+   "id": 514,
+   "file": "file_brain_AXT2_203_2030039.h5",
+   "slice": 7
+  },
+  {
+   "id": 521,
+   "file": "file_brain_AXT2_200_2000358.h5",
+   "slice": 7
+  },
+  {
+   "id": 528,
+   "file": "file_brain_AXT2_207_2070282.h5",
+   "slice": 7
+  },
+  {
+   "id": 534,
+   "file": "file_brain_AXT2_207_2070041.h5",
+   "slice": 6
+  },
+  {
+   "id": 535,
+   "file": "file_brain_AXT2_207_2070041.h5",
+   "slice": 7
+  }
+ ]
+}

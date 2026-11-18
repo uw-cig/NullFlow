@@ -1,0 +1,71 @@
+# NullFlow on FFHQ 256 x 256 random inpainting: 70% of the pixels missing, noiseless measurements.
+# configs/ffhq_box.yaml differs only in the mask (inpainting.mask) and the training length.
+
+task: inpainting
+
+data:
+  root: data/ffhq256            # one folder of 00000.png ... 69999.png at 256 x 256
+  splits:                       # index ranges [start, end)
+    train: [1000, 70000]
+    val: [500, 1000]
+    test: [0, 500]
+  size: 256
+  hflip: true                   # random horizontal flip of the training images
+
+inpainting:
+  mask: random                  # box: centred square hole | random: drop pixels uniformly
+  box_size: 128
+  drop: 0.7                     # random masks: fraction of missing pixels
+
+nullflow:
+  tau: 1.0                      # null-space draw x_p ~ N(0, tau^2 I)
+  sigma: 0.0                    # measurement noise std
+  p_ratio: 0.5                  # fraction of samples with r = t
+  corner_frac: 0.1              # share of the r < t samples moved to r ~ 0, t ~ 1
+  logit_mu: 0.0                 # t ~ logit-normal(logit_mu, logit_sigma)
+  logit_sigma: 1.0
+  weight_c: 1.0e-3              # adaptive loss weight w = (m / m_ref + c)^-p
+  weight_p: 1.0
+  weight_norm: ema              # m_ref = running mean of m ...
+  weight_norm_decay: 0.99       # ... with this decay per optimizer step
+  t_eps: 1.0e-3
+
+model:                          # 110.5M parameters; input [z, A^H y, mask] = 7 channels
+  in_ch: 3
+  out_ch: 3
+  input_height: 256
+  ch: 64
+  ch_mult: [1, 2, 4, 4, 8, 8]
+  num_res_blocks: 2
+  attn_resolutions: [32, 16]
+  dropout: 0.1
+  resamp_with_conv: true
+  cond_r: true
+  cond_sigma: true
+  sigma_emb_scale: 10.0
+
+training:
+  epochs: 100
+  steps_per_epoch: null         # one pass over the 69,000 training images = 135 optimizer steps
+  batch_size: 512               # global batch
+  micro_batch: 4                # images per GPU per forward pass; gradients accumulate to batch_size
+  lr: 1.0e-4                    # AdamW, constant except for the two changes below
+  lr_schedule: constant
+  lr_drop:                      # x 0.1 once val PSNR >= 23 dB on 2 consecutive validations (epoch 2)
+    threshold: 23.0
+    patience: 2
+    scale: 0.1
+  lr_at_epoch:                  # lr 5e-6 from epoch 51 on
+    50: 5.0e-6
+  betas: [0.9, 0.95]
+  weight_decay: 0.0
+  grad_clip: 1.0
+  val_every: 1                  # one-draw PSNR on the validation split after every epoch
+  save_every: 5
+  num_workers: 4
+  seed: 42
+  backend: nccl                 # torch.distributed backend for multi-GPU runs (gloo if NCCL fails)
+
+eval:
+  chunk: 100                    # every source draw of an image in one generator call
+  net_batch: 50                 # draws per network call
