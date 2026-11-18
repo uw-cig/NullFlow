@@ -6,16 +6,67 @@ Reference implementation of **NullFlow**, a **one-step generative reconstruction
   <img src="assets/compare_new.png" width="100%">
 </p>
 
-The two forward operators:
-- **MRI:** A = M F S, with Cartesian mask M, Fourier transform F and coil sensitivities S. The pseudo-inverse
-  is computed by conjugate gradient, at most 200 iterations.
-- **Inpainting:** A = diag(mask). The pseudo-inverse is elementwise, so x1 is y on the observed pixels and
-  x_p in the holes.
+## Method
 
-The network u is trained with the MeanFlow identity on the straight path z_t = (1 − t) x0 + t x1. It is
-conditioned on (t, r) and on the measurement (A^H y; for inpainting also the mask), and it predicts x0. A
-reconstruction is one call, x̂ = net([x1, A^H y, …], r = 0, t = 1). Averaging M independent draws
-estimates the posterior mean.
+For measurements $y = Ax + n$ with $n \sim \mathcal{N}(0, \sigma^2 I)$ and a Gaussian working prior
+$x \sim \mathcal{N}(0, \tau^2 I)$, the flow's source is the posterior of that prior:
+
+```math
+x_1 \sim \mathcal{N}\big(m_y,\ \tau^2 W\big), \qquad
+m_y = (A^{H}A + \lambda I)^{-1} A^{H} y, \qquad
+W = I - (A^{H}A + \lambda I)^{-1} A^{H}A, \qquad
+\lambda = \sigma^2 / \tau^2 .
+```
+
+It is drawn with a square-root-free randomize-then-optimize sampler that never forms $W^{1/2}$:
+
+```math
+x_1 = x_p + (A^{H}A + \lambda I)^{-1} A^{H}\,\big(y - A x_p - n'\big), \qquad
+x_p \sim \mathcal{N}(0, \tau^2 I), \quad n' \sim \mathcal{N}(0, \sigma^2 I).
+```
+
+This needs only $A$, $A^{H}$ and one regularized solve, which each operator implements directly:
+
+- **Inpainting:** $A = \mathrm{diag}(M)$ for a pixel mask $M$, so the solve is elementwise, $M \odot r / (M + \lambda)$.
+- **MRI:** $A = M F S$, with Cartesian mask $M$, Fourier transform $F$ and coil sensitivities $S$. The solve is conjugate gradient, at most 200 iterations.
+
+The released models are noiseless: $\sigma = 0$ ($\lambda = 10^{-8}$) and $\tau = 1$. The source then keeps the part of $x$ that $y$
+determines and randomizes only the null space:
+
+```math
+x_1 \approx A^{+} y + P_{\mathrm{null}(A)}\, x_p .
+```
+
+For inpainting, $x_1$ is $y$ on the observed pixels and $x_p$ in the holes.
+
+**Training.** On the straight path $z_t = (1 - t)\,x_0 + t\,x_1$ with velocity $v = x_1 - x_0$, the network $f_\theta$
+predicts the clean image. Its average velocity is
+
+```math
+u_\theta(z_t, r, t) = \frac{z_t - f_\theta\big([z_t,\ c(y)],\ r,\ t\big)}{t} .
+```
+
+The network is conditioned on $c(y)$, concatenated onto the interpolant:
+- **MRI:** $c(y) = A^{H}y$.
+- **Inpainting:** $c(y) = [A^{H}y,\ M]$.
+
+Training regresses the MeanFlow identity against the path velocity, with an adaptive weight $w$:
+
+```math
+\min_\theta\ \mathbb{E}\Big[\, w\, \big\| u_\theta + (t - r)\,\mathrm{sg}\big[\tfrac{d}{dt} u_\theta\big] - v \big\|^2 \Big] .
+```
+
+Here $\tfrac{d}{dt} u_\theta$ is a forward-mode JVP along $(v, 0, 1)$.
+
+**Sampling** is one network call at $(r, t) = (0, 1)$:
+
+```math
+\hat{x} = f_\theta\big([x_1,\ c(y)],\ r = 0,\ t = 1\big).
+```
+
+Each draw is a posterior sample. Averaging $M$ draws, with the measurement held fixed, estimates the posterior mean
+$\mathbb{E}[x \mid y]$, and it trades LPIPS for PSNR/SSIM. That trade is the gap between the one-draw and the averaged
+rows in the tables below; it is not a tuning artifact.
 
 ## Tasks
 
