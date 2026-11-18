@@ -2,7 +2,9 @@
 
 Reference implementation of **NullFlow**, a **one-step generative reconstruction** method for linear inverse problems. By restricting the generative flow to the **measurement-consistent subspace**, NullFlow preserves measurement consistency by construction without requiring iterative data-fidelity corrections. Built on **MeanFlow**, it learns the average velocity of a null-space-constrained flow, enabling posterior sampling with a single network evaluation. NullFlow achieves competitive reconstruction quality against iterative diffusion and flow-based solvers on **image inpainting and accelerated MRI**, while reducing inference from hundreds of network evaluations to just one.
 
-![NullFlow Overview](assets/compare_new.png)
+<p align="center">
+  <img src="assets/compare_new.png" width="80%">
+</p>
 
 The two forward operators:
 - **MRI:** A = M F S, with Cartesian mask M, Fourier transform F and coil sensitivities S. The pseudo-inverse
