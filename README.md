@@ -66,8 +66,8 @@ pip install -r requirements.txt
 
 ### fastMRI brain
 
-**Download.** Get the fastMRI brain `multicoil_val` release from https://fastmri.med.nyu.edu/. Every volume used
-here comes from it:
+**Download.** Get the fastMRI brain `multicoil_val` release (Zbontar et al., 2018; Knoll et al., 2020) from
+https://fastmri.med.nyu.edu/. Every volume used here comes from it:
 - 615 training volumes (4,305 slices)
 - 77 validation volumes
 - 77 test volumes
@@ -87,6 +87,8 @@ images and the maps to 320 × 320. It then stores the coil-combined image x0 = �
 **At load time**, each slice is divided by max |x0|, and its maps are zero-padded to 20 coils.
 
 ### FFHQ
+
+**Download.** Get FFHQ (Karras et al., 2019) from https://github.com/NVlabs/ffhq-dataset.
 
 Put the 70,000 FFHQ images at 256 × 256 in one folder, named `00000.png` … `69999.png`. The default location is
 `data/ffhq256`. Images of another size are resized bilinearly when they are loaded.
@@ -226,8 +228,3 @@ checkpoint is saved every 5 epochs.
 ## Citation
 
 _To be added._
-
-## Acknowledgements
-
-The MeanFlow training code and the network build on the SNaP codebase (https://github.com/wustl-cig/SNaP). The data
-come from the fastMRI dataset (Zbontar et al., 2018; Knoll et al., 2020) and the FFHQ dataset (Karras et al., 2019).
