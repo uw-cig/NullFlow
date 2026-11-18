@@ -227,3 +227,7 @@ checkpoint is saved every 5 epochs.
 ## Citation
 
 _To be added._
+
+## License
+
+This code is released under the [MIT License](LICENSE). The fastMRI and FFHQ datasets are subject to their own terms of use.
