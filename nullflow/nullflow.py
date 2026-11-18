@@ -17,9 +17,11 @@ Transport. Path z_t = (1 - t) x0 + t x1 (t = 0 clean, t = 1 source), velocity v 
 network predicts x0 (x-prediction), u_{r,t}(z) = (z - net([z, cond(y)], r, t, sigma)) / t, and is
 trained with the MeanFlow identity  u + (t - r) sg(du/dt) ~ v  (du/dt by a forward-mode JVP along
 (v, 0, 1)) under the adaptive weight w = 1 / (m / m_ref + c), m the per-sample squared residual and
-m_ref = 1 (weight_norm "fixed") or a running mean of m (weight_norm "ema").
+m_ref = 1 (operator weight_norm "fixed": MRI) or a running mean of m ("ema": inpainting).
 
 Sampling is one network call:  x0_hat = net([x1, cond(y)], r = 0, t = 1, sigma).
+
+These settings are fixed (the class constants below); a config only sets the measurement noise sigma.
 """
 from __future__ import annotations
 
@@ -33,26 +35,32 @@ from torch.func import jvp
 
 class NullFlow(torch.nn.Module):
 
-    def __init__(self, net: torch.nn.Module, op, tau: float = 1.0, sigma: float = 0.0,
-                 p_ratio: float = 0.5, corner_frac: float = 0.1, logit_mu: float = 0.0,
-                 logit_sigma: float = 1.0, weight_c: float = 1e-3, weight_p: float = 1.0,
-                 t_eps: float = 1e-3, weight_norm: str = "fixed", weight_norm_decay: float = 0.99):
+    # Fixed NullFlow settings.
+    TAU = 1.0                # null-space draw x_p ~ N(0, tau^2 I)
+    P_RATIO = 0.5            # fraction of samples with r = t
+    CORNER_FRAC = 0.1        # of the r < t samples, the share moved to r ~ 0, t ~ 1
+    LOGIT_MU = 0.0           # t ~ logit-normal(LOGIT_MU, LOGIT_SIGMA)
+    LOGIT_SIGMA = 1.0
+    WEIGHT_C = 1e-3          # adaptive loss weight w = (m / m_ref + c)^-p
+    WEIGHT_P = 1.0
+    WEIGHT_NORM_DECAY = 0.99  # decay of the running mean m_ref, per optimizer step ("ema" only)
+    T_EPS = 1e-3
+
+    def __init__(self, net: torch.nn.Module, op, sigma: float = 0.0):
         super().__init__()
         self.net = net
         self.op = op
-        self.tau = float(tau)
         self.sigma = float(sigma)            # measurement noise std (0 for the noiseless setting)
-        self.p_ratio = float(p_ratio)        # fraction of samples with r = t
-        self.corner_frac = float(corner_frac)  # of the r < t samples, the share moved to r ~ 0, t ~ 1
-        self.logit_mu = float(logit_mu)
-        self.logit_sigma = float(logit_sigma)
-        self.weight_c = float(weight_c)
-        self.weight_p = float(weight_p)
-        self.t_eps = float(t_eps)
-        if weight_norm not in ("fixed", "ema"):
-            raise ValueError(f"weight_norm must be 'fixed' or 'ema', got {weight_norm!r}")
-        self.weight_norm = weight_norm
-        self.weight_norm_decay = float(weight_norm_decay)   # per call of loss()
+        self.tau = self.TAU
+        self.p_ratio = self.P_RATIO
+        self.corner_frac = self.CORNER_FRAC
+        self.logit_mu = self.LOGIT_MU
+        self.logit_sigma = self.LOGIT_SIGMA
+        self.weight_c = self.WEIGHT_C
+        self.weight_p = self.WEIGHT_P
+        self.t_eps = self.T_EPS
+        self.weight_norm = op.weight_norm    # "fixed" (MRI) or "ema" (inpainting), set by the operator
+        self.weight_norm_decay = self.WEIGHT_NORM_DECAY   # per call of loss(); train.py adjusts it
         self._m_ema = None
 
     # ------------------------------------------------------------------ measurement side

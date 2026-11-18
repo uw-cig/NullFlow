@@ -49,7 +49,18 @@ def build_operator(cfg: dict):
 
 def build_model(cfg: dict, device) -> NullFlow:
     op = build_operator(cfg)
-    return NullFlow(build_net(cfg["model"], op.extra_cond), op, **cfg["nullflow"]).to(device)
+    nf = dict(cfg.get("nullflow") or {})
+    sigma = float(nf.pop("sigma", 0.0))
+    # Older configs list the fixed settings too: accept them only with the fixed values.
+    fixed = {k.lower(): getattr(NullFlow, k) for k in ("TAU", "P_RATIO", "CORNER_FRAC", "LOGIT_MU", "LOGIT_SIGMA",
+                                                      "WEIGHT_C", "WEIGHT_P", "WEIGHT_NORM_DECAY", "T_EPS")}
+    fixed["weight_norm"] = op.weight_norm
+    for k, v in nf.items():
+        if k not in fixed:
+            raise ValueError(f"unknown setting nullflow.{k}: only nullflow.sigma can be set")
+        if v != fixed[k]:
+            raise ValueError(f"nullflow.{k}={v!r} cannot be changed: NullFlow fixes {k} = {fixed[k]!r}")
+    return NullFlow(build_net(cfg["model"], op.extra_cond), op, sigma=sigma).to(device)
 
 
 def build_dataset(cfg: dict, split: str, ids=None) -> Dataset:

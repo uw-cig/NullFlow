@@ -68,6 +68,7 @@ class MultiCoilMRI:
 
     name = "mri"
     extra_cond = 0          # the network sees [z, A^H y]: no conditioning channel beyond A^H y
+    weight_norm = "fixed"   # loss weight w = (m + c)^-p
 
     def __init__(self, acceleration: int, total_lines: int = 320, mask_seed: int = 0,
                  pattern: str = "random", cg_iters: int = 200, cg_tol: float = 1e-6):

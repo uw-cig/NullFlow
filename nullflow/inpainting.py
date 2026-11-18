@@ -23,6 +23,7 @@ Tensor = torch.Tensor
 class Inpainting:
     name = "inpainting"
     extra_cond = 1          # the mask is one extra conditioning channel: the network sees [z, A^H y, M]
+    weight_norm = "ema"     # loss weight w = (m / running mean of m + c)^-p
 
     def __init__(self, mask: str = "box", box_size: int = 128, drop: float = 0.7):
         if mask not in ("box", "random"):

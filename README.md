@@ -190,7 +190,7 @@ checkpoint is saved every 5 epochs.
 - 100 epochs; an epoch is one pass over the 69,000 training images, with random horizontal flips
 - global batch 512, as 4 images per GPU with gradient accumulation
 - AdamW (β = 0.9, 0.95) at a constant lr 1e-4, no weight decay, gradient clipping at 1, dropout 0.1
-- adaptive loss weight normalized by a running mean of the residual (`nullflow.weight_norm: ema`)
+- adaptive loss weight normalized by a running mean of the residual
 - validation: one-draw PSNR on the 500 validation images after every epoch. The lr is multiplied by 0.1 once,
   after validation PSNR first reaches 23 dB on two consecutive epochs.
 - On RTX PRO 5000 GPUs, one epoch takes about 22 min on 4 GPUs (box) and about 45 min on 2 GPUs (random).
