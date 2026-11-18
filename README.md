@@ -8,104 +8,19 @@ Reference implementation of **NullFlow**, a **one-step generative reconstruction
 
 ## Method
 
-We consider noiseless linear measurements $y = Ax$ with an ill-posed $A$, i.e. $\mathrm{null}(A) \neq \{0\}$. Any image
-decomposes into a row-space and a null-space component,
+For noiseless measurements $y = Ax$, every measurement-consistent image lies in the affine subspace
+$\mathcal{M}_y = \{x : Ax = y\}$ and differs only in its null-space component $Px$, with $P = I - A^{\dagger}A$. NullFlow
+confines a MeanFlow to $\mathcal{M}_y$: the source $x_1 = A^{\dagger}y + P\epsilon$, $\epsilon \sim \mathcal{N}(0, I)$, pins the
+row space to $A^{\dagger}y$ and fills the null space with noise, and the flow moves only along $\mathrm{null}(A)$, so every
+state satisfies $Ax = y$ without a separate data-fidelity step. The network learns the flow's average velocity with
+the MeanFlow objective, so a reconstruction is a single network evaluation:
 
 ```math
-x = \underbrace{A^{\dagger}A\,x}_{\text{row space}} + \underbrace{(I - A^{\dagger}A)\,x}_{\text{null space}},
-\qquad P := I - A^{\dagger}A ,
+\hat{x} = A^{\dagger}y + P\, x^{\theta}_{0,1}\big(A^{\dagger}y + P\epsilon\big).
 ```
 
-where $A^{\dagger}$ is the pseudo-inverse of $A$ and $P$ the orthogonal projection onto $\mathrm{null}(A)$. The measurement fixes the
-row-space component, and every measurement-consistent image lies in the affine subspace
-
-```math
-\mathcal{M}_y := \{\, x : Ax = y \,\}.
-```
-
-NullFlow learns a one-step MeanFlow that stays entirely within $\mathcal{M}_y$ and samples from the conditional image
-distribution $p(x \mid y)$.
-
-### Subspace-restricted flow matching
-
-The flow transports between two distributions supported on $\mathcal{M}_y$. The source is $x_1 \sim q(\cdot \mid y)$ with
-$x_1 = A^{\dagger}y + Pz$ and $z \sim \mathcal{N}(0, I)$: the row-space component is pinned to the least-squares estimate
-$A^{\dagger}y$ and the null space is filled with Gaussian noise. The target is $x_0 \sim p(\cdot \mid y)$. The conditional path
-toward $x_0$ is Gaussian with covariance confined to $\mathrm{null}(A)$,
-
-```math
-p_t(x \mid x_0, y) = \mathcal{N}\big(x \,\big|\, \mu_t(x_0, y),\ \sigma_t^2(x_0)\,P\big),
-\qquad
-\mu_t(x_0, y) = \big(1 - (1 - \sigma_{\min})\,t\big)\,P x_0 + A^{\dagger}y,
-\qquad
-\sigma_t(x_0) = t ,
-```
-
-so that $p_1 = q(\cdot \mid y)$ and $p_0$ concentrates at $x_0$. It is realized by the conditional flow
-
-```math
-\psi_t(x \mid y) = t\,P x + \big(1 - (1 - \sigma_{\min})\,t\big)\,P x_0 + A^{\dagger}y ,
-```
-
-which moves the null-space content from $Px$ to $Px_0$ while holding the anchor $A^{\dagger}y$ fixed. Its velocity field
-
-```math
-v_t(x \mid y) = P\big(x - (1 - \sigma_{\min})\,x_0\big) \in \mathrm{null}(A)
-```
-
-lies in the null space, so a step along it preserves $Ax = y$: every state of the flow is measurement-consistent, with
-no separate data-fidelity step.
-
-### One-step sampling via MeanFlow
-
-Instead of integrating $v_t$ from $t = 1$ to $t = 0$, NullFlow learns the average velocity between two times $r \le t$,
-
-```math
-u_{r,t}(x_t \mid y) := \frac{1}{t - r} \int_r^t v_\tau(x_\tau \mid y)\, d\tau ,
-```
-
-which allows a single jump from the source to the data. Differentiating in $t$ gives the MeanFlow identity on $\mathcal{M}_y$,
-
-```math
-u_{r,t}(x_t \mid y) = v_t(x_t \mid y) - (t - r)\,\frac{d}{dt}\, u_{r,t}(x_t \mid y) ,
-```
-
-which involves only $v_t$ and a derivative of $u_{r,t}$, both available without integration. Following Pixel MeanFlow, the
-network $x^{\theta}_{r,t}$ predicts the clean image and the average velocity is $u^{\theta}_{r,t}(z_t \mid y) = \big(z_t - x^{\theta}_{r,t}(z_t)\big)/t$.
-It is trained with
-
-```math
-\mathcal{L}_{\mathrm{PMF}} := \mathbb{E}_{r,t,x,y,\epsilon}\,
-\big\| V^{\theta}_{r,t}(x_t \mid y) - (\epsilon - x) \big\|_2^2 ,
-\qquad
-V^{\theta}_{r,t}(x_t \mid y) := u^{\theta}_{r,t}(x_t \mid y) + (t - r)\,\mathrm{sg}\Big[\tfrac{d}{dt}\, u^{\theta}_{r,t}\Big],
-```
-
-where $z_t = t\,P\epsilon + (1 - t)\,P x + A^{\dagger}y$, the time derivative is a forward-mode JVP along the instantaneous velocity, and
-$\mathrm{sg}$ is the stop-gradient. A zero loss enforces the MeanFlow identity, so $u^{\theta}_{0,1}$ is a one-step sampler of
-$p(x \mid y)$.
-
-**Sampling** evaluates the network once:
-
-```math
-\hat{x} = A^{\dagger}y + P\, x^{\theta}_{0,1}\big(A^{\dagger}y + P\epsilon\big),
-\qquad \epsilon \sim \mathcal{N}(0, I).
-```
-
-Each draw is a posterior sample. Averaging $M$ draws for the same $y$ estimates the posterior mean $\mathbb{E}[x \mid y]$: one
-draw gives the best perceptual quality (LPIPS), and averaging trades it for distortion (PSNR, SSIM). That is the gap
-between the one-draw and the averaged rows in the tables below.
-
-### Implementation notes
-
-- **Operators.** Inpainting uses $A = \mathrm{diag}(M)$ for a pixel mask $M$, so $A^{\dagger}y = My$ and $P = \mathrm{diag}(1 - M)$. MRI uses
-  $A = MFS$ (Cartesian mask, Fourier transform, coil sensitivities), with $A^{\dagger}$ applied as $(A^{H}A + \lambda I)^{-1}A^{H}$,
-  $\lambda = 10^{-8}$, by conjugate gradient (at most 200 iterations).
-- **Network input.** The network sees $[z_t,\ c(y)]$ and is conditioned on $(r, t)$, with $c(y) = A^{H}y$ for MRI and
-  $c(y) = [A^{H}y,\ M]$ for inpainting. We use $\sigma_{\min} = 0$.
-- **Training details.** The $(t, r)$ sampling and the adaptive loss weight are fixed in `nullflow/nullflow.py`.
-- **Evaluation.** `evaluate.py` scores the network output $x^{\theta}_{0,1}$. For inpainting, `--restore` applies the final
-  projection $A^{\dagger}y + P(\cdot)$.
+Each draw is a posterior sample; averaging several draws for the same $y$ approaches the posterior mean, trading LPIPS
+for PSNR and SSIM.
 
 ## Tasks
 
